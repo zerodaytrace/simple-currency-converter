@@ -9,13 +9,17 @@ public class CurrencyMain {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("\nSupported currencies: " + converter.getSupportedCurrencies());
-        System.out.print("Enter amount to convert: ");
-        
-        if (!scanner.hasNextDouble()) {
-            System.out.println("Invalid amount");
-            scanner.close();
+
+        double amount = 0;
+        while (true) {
+            System.out.print("Enter amount to convert: ");
+            if (scanner.hasNextDouble()) {
+                amount = scanner.nextDouble();
+                break;
+            }
+            System.out.println("Invalid amount. Please enter a numeric value.");
+            scanner.next(); // discard invalid input so the loop doesn't spin
         }
-        double amount = scanner.nextDouble();
 
         System.out.print("Enter currency to convert from: ");
         String fromCurrency = scanner.next();
