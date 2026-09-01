@@ -22,9 +22,9 @@ public class CurrencyConverter {
         String from = fromCurrency.toUpperCase(Locale.ROOT);
         String to = toCurrency.toUpperCase(Locale.ROOT);
 
-        if (!ratesToUSD.containsKey(from) || !ratesToUSD.containsKey(to)) {
+        if (!ratesToUSD.containsKey(from) || !ratesToUSD.containsKey(to)) 
             throw new IllegalArgumentException("Unsupported currency");
-        }
+        
 
         double amountInUSD = amount * ratesToUSD.get(from);
         double convertedAmount = amountInUSD / ratesToUSD.get(to);

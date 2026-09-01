@@ -9,17 +9,18 @@ public class CurrencyMain {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("\nSupported currencies: " + converter.getSupportedCurrencies());
-        System.out.println("Enter amount to convert: ");
+        System.out.print("Enter amount to convert: ");
+        
         if (!scanner.hasNextDouble()) {
             System.out.println("Invalid amount");
             scanner.close();
         }
         double amount = scanner.nextDouble();
 
-        System.out.println("Enter currency to convert from: ");
+        System.out.print("Enter currency to convert from: ");
         String fromCurrency = scanner.next();
 
-        System.out.println("Enter currency to convert to: ");
+        System.out.print("Enter currency to convert to: ");
         String toCurrency = scanner.next();
 
         scanner.close();
@@ -27,7 +28,10 @@ public class CurrencyMain {
         try {
             double result = converter.convert(amount, fromCurrency, toCurrency);
 
-            System.out.printf("%.2f %s = %.2f %s", amount, fromCurrency.toUpperCase(Locale.ROOT), result, toCurrency.toUpperCase(Locale.ROOT));
+            System.out.printf("%.2f %s = %.2f %s", amount, 
+            fromCurrency.toUpperCase(Locale.ROOT), result, 
+            toCurrency.toUpperCase(Locale.ROOT));
+            
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
