@@ -8,6 +8,7 @@ public class CurrencyMain {
         var converter = new CurrencyConverter();
         Scanner scanner = new Scanner(System.in);
 
+        System.out.println("\nWelcome to the Currency Converter Program!");
         System.out.println("\nSupported currencies: " + converter.getSupportedCurrencies());
 
         double amount = 0;
