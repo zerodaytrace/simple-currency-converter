@@ -13,19 +13,24 @@ public class CurrencyMain {
 
         double amount = 0;
         while (true) {
-            System.out.print("Enter amount to convert: ");
-            if (scanner.hasNextDouble()) {
-                amount = scanner.nextDouble();
+            System.out.print("Enter amount to convert (or 'quit' or 'q' to exit): ");
+            String input = scanner.next();
+            
+            exitIfQuit(input, scanner);
+            try {
+                amount = Double.parseDouble(input);
                 break;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid amount. Please enter a numeric value.");
             }
-            System.out.println("Invalid amount. Please enter a numeric value.");
-            scanner.next(); 
         }
 
         String fromCurrency;
         while (true) {
-            System.out.print("Enter currency to convert from: ");
+            System.out.print("Enter currency to convert from (or 'quit' or 'q' to exit): ");
             fromCurrency = scanner.next();
+
+            exitIfQuit(fromCurrency, scanner);
             if (converter.isSupported(fromCurrency)) {
                 break;
             }
@@ -35,8 +40,10 @@ public class CurrencyMain {
 
         String toCurrency;
         while (true) {
-            System.out.print("Enter currency to convert to: ");
+            System.out.print("Enter currency to convert to (or 'quit' or 'q' to exit): ");
             toCurrency = scanner.next();
+
+            exitIfQuit(toCurrency, scanner);
             if (converter.isSupported(toCurrency)) {
                 break;
             }
@@ -55,6 +62,14 @@ public class CurrencyMain {
             
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
+        }
+    }
+
+    private static void exitIfQuit(String input, Scanner scanner) {
+        if (input.equalsIgnoreCase("quit") || input.equalsIgnoreCase("q")) {
+            System.out.println("Terminating program...done");
+            scanner.close();
+            System.exit(0);
         }
     }
 }
