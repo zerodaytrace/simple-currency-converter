@@ -21,11 +21,27 @@ public class CurrencyMain {
             scanner.next(); 
         }
 
-        System.out.print("Enter currency to convert from: ");
-        String fromCurrency = scanner.next();
+        String fromCurrency;
+        while (true) {
+            System.out.print("Enter currency to convert from: ");
+            fromCurrency = scanner.next();
+            if (converter.isSupported(fromCurrency)) {
+                break;
+            }
+            System.out.println("Unsupported currency. Only accepted currency codes are allowed: "
+                    + converter.getSupportedCurrencies());
+        }
 
-        System.out.print("Enter currency to convert to: ");
-        String toCurrency = scanner.next();
+        String toCurrency;
+        while (true) {
+            System.out.print("Enter currency to convert to: ");
+            toCurrency = scanner.next();
+            if (converter.isSupported(toCurrency)) {
+                break;
+            }
+            System.out.println("Unsupported currency. Only accepted currency codes are allowed: "
+                    + converter.getSupportedCurrencies());
+        }
 
         scanner.close();
 

@@ -18,6 +18,10 @@ public class CurrencyConverter {
         return new TreeSet<>(ratesToUSD.keySet());
     }
 
+    public boolean isSupported(String currencyCode) {
+        return ratesToUSD.containsKey(currencyCode.toUpperCase(Locale.ROOT));
+    }
+
     public double convert(double amount, String fromCurrency, String toCurrency) {
         String from = fromCurrency.toUpperCase(Locale.ROOT);
         String to = toCurrency.toUpperCase(Locale.ROOT);
