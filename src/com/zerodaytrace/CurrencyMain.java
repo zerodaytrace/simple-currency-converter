@@ -18,7 +18,7 @@ public class CurrencyMain {
                 break;
             }
             System.out.println("Invalid amount. Please enter a numeric value.");
-            scanner.next(); // discard invalid input so the loop doesn't spin
+            scanner.next(); 
         }
 
         System.out.print("Enter currency to convert from: ");
