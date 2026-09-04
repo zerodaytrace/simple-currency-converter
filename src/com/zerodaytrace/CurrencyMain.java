@@ -8,8 +8,17 @@ public class CurrencyMain {
         var converter = new CurrencyConverter();
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("\nWelcome to the Currency Converter Program!");
-        System.out.println("\nSupported currencies: " + converter.getSupportedCurrencies());
+        System.out.println("\nWelcome to the Currency Converter Program!\n");
+
+        try {
+            int count = converter.getSupportedCurrencies().size();
+            System.out.println(count + " currencies available for live exchange rate (e.g. USD, EUR, GBP, JPY, BTC).");
+        } catch (ExchangeRateApiClient.ExchangeRateException e) {
+            System.out.println("\nUnable to reach the exchange rate service. "
+                    + "Please check your connection and try again.");
+            scanner.close();
+            return;
+        }
 
         double amount = 0;
         while (true) {
@@ -17,6 +26,7 @@ public class CurrencyMain {
             String input = scanner.next();
             
             exitIfQuit(input, scanner);
+
             try {
                 amount = Double.parseDouble(input);
                 break;
@@ -31,11 +41,11 @@ public class CurrencyMain {
             fromCurrency = scanner.next();
 
             exitIfQuit(fromCurrency, scanner);
+
             if (converter.isSupported(fromCurrency)) {
                 break;
             }
-            System.out.println("Unsupported currency. Only accepted currency codes are allowed: "
-                    + converter.getSupportedCurrencies());
+            System.out.println("Unsupported currency code. Please enter a valid code (e.g. USD, EUR, GBP).");
         }
 
         String toCurrency;
@@ -44,11 +54,11 @@ public class CurrencyMain {
             toCurrency = scanner.next();
 
             exitIfQuit(toCurrency, scanner);
+            
             if (converter.isSupported(toCurrency)) {
                 break;
             }
-            System.out.println("Unsupported currency. Only accepted currency codes are allowed: "
-                    + converter.getSupportedCurrencies());
+            System.out.println("Unsupported currency code. Please enter a valid code (e.g. USD, EUR, GBP).");
         }
 
         scanner.close();
@@ -58,9 +68,9 @@ public class CurrencyMain {
 
             System.out.printf("%.2f %s = %.2f %s", amount, 
             fromCurrency.toUpperCase(Locale.ROOT), result, 
-            toCurrency.toUpperCase(Locale.ROOT));
+            toCurrency.toUpperCase(Locale.ROOT));  
             
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | ExchangeRateApiClient.ExchangeRateException e) {
             System.out.println(e.getMessage());
         }
     }
