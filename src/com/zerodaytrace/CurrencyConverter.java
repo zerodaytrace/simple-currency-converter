@@ -3,11 +3,7 @@ package com.zerodaytrace;
 import java.util.Locale;
 import java.util.Set;
 
-/**
- * Converts between currencies using live exchange rates supplied by an
- * {@link ExchangeRateApiClient}. The list of supported currencies is fetched
- * once on first use and cached for the lifetime of this instance.
- */
+
 public class CurrencyConverter {
     private final ExchangeRateApiClient api;
     private Set<String> supportedCurrencies;
@@ -16,12 +12,12 @@ public class CurrencyConverter {
         this(new ExchangeRateApiClient());
     }
 
-    // Allows a different (e.g. test) client to be supplied.
+   
     public CurrencyConverter(ExchangeRateApiClient api) {
         this.api = api;
     }
 
-    /** Lower-case codes of every currency the API supports (fetched once, then cached). */
+   
     public Set<String> getSupportedCurrencies() {
         if (supportedCurrencies == null) {
             supportedCurrencies = api.fetchSupportedCurrencies();
