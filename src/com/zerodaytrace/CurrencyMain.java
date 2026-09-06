@@ -1,5 +1,7 @@
 package com.zerodaytrace;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -64,11 +66,12 @@ public class CurrencyMain {
         scanner.close();
 
         try {
-            double result = converter.convert(amount, fromCurrency, toCurrency);
+            var result = converter.convert(amount, fromCurrency, toCurrency);
+            String from = fromCurrency.toUpperCase(Locale.ROOT);
+            String to = toCurrency.toUpperCase(Locale.ROOT);
 
-            System.out.printf("%.2f %s = %.2f %s", amount, 
-            fromCurrency.toUpperCase(Locale.ROOT), result, 
-            toCurrency.toUpperCase(Locale.ROOT));  
+            System.out.printf("%.2f %s = %.2f %s%n", amount, from, result.convertedAmount(), to);
+            System.out.printf("Rate: 1 %s = %s %s%n", from, formatRate(result.rate()), to);  
             
         } catch (IllegalArgumentException | ExchangeRateApiClient.ExchangeRateException e) {
             System.out.println(e.getMessage());
@@ -81,5 +84,12 @@ public class CurrencyMain {
             scanner.close();
             System.exit(0);
         }
+    }
+
+    private static String formatRate(double rate) {
+        return BigDecimal.valueOf(rate)
+                .round(new MathContext(6))
+                .stripTrailingZeros()
+                .toPlainString();
     }
 }

@@ -33,7 +33,7 @@ public class CurrencyConverter {
         return getSupportedCurrencies().contains(currencyCode.toLowerCase(Locale.ROOT));
     }
 
-    public double convert(double amount, String fromCurrency, String toCurrency) {
+    public ConversionResult convert(double amount, String fromCurrency, String toCurrency) {
         String from = fromCurrency.toLowerCase(Locale.ROOT);
         String to = toCurrency.toLowerCase(Locale.ROOT);
 
@@ -41,8 +41,12 @@ public class CurrencyConverter {
             throw new IllegalArgumentException("Unsupported currency");
         }
         if (from.equals(to)) {
-            return amount;
+            return new ConversionResult(amount, 1.0);
         }
-        return amount * api.fetchRate(from, to);
+        double rate = api.fetchRate(from, to);
+        return new ConversionResult(amount * rate, rate);
     }
+
+    
+    public record ConversionResult(double convertedAmount, double rate) { }
 }
