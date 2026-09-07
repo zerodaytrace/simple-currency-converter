@@ -75,7 +75,7 @@ public class CurrencyMain {
             String from = fromCurrency.toUpperCase(Locale.ROOT);
             String to = toCurrency.toUpperCase(Locale.ROOT);
 
-            System.out.printf(Locale.ROOT, "%.2f %s = %.2f %s%n", amount, from, result.convertedAmount(), to);
+            System.out.printf(Locale.ROOT, "%s %s = %s %s%n", formatAmount(amount), from, formatAmount(result.convertedAmount()), to);
             System.out.printf(Locale.ROOT, "Rate: 1 %s = %s %s%n", from, formatRate(result.rate()), to);  
             
         } catch (IllegalArgumentException | ExchangeRateApiClient.ExchangeRateException e) {
@@ -91,8 +91,21 @@ public class CurrencyMain {
         }
     }
 
-    private static String formatRate(double rate) {
-        return BigDecimal.valueOf(rate)
+    // Sub-cent magnitudes would print as "0.00" under %.2f, so tiny (e.g. crypto)
+    // results fall back to significant-figure formatting instead of vanishing.
+    static String formatAmount(double value) {
+        if (value != 0 && Math.abs(value) < 0.005) {
+            return toSignificant(value);
+        }
+        return String.format(Locale.ROOT, "%.2f", value);
+    }
+
+    static String formatRate(double rate) {
+        return toSignificant(rate);
+    }
+
+    private static String toSignificant(double value) {
+        return BigDecimal.valueOf(value)
                 .round(new MathContext(6))
                 .stripTrailingZeros()
                 .toPlainString();

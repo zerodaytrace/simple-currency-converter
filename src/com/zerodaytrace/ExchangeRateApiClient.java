@@ -11,7 +11,13 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
+/**
+ * Talks to the fawazahmed0/exchange-api to fetch the list of supported
+ * currencies and individual exchange rates.
+ *
+ * Zero external dependencies: uses the JDK's built-in {@link HttpClient} and
+ * light-weight regex parsing of the (minified) JSON responses.
+ */
 public class ExchangeRateApiClient {
 
     private static final String DEFAULT_PRIMARY =
@@ -20,6 +26,7 @@ public class ExchangeRateApiClient {
             "https://latest.currency-api.pages.dev/v1/";
 
     
+    // Matches a JSON key whose value is a string: "code":"Name" -> captures the code.
     private static final Pattern CODE_PATTERN =
             Pattern.compile("\"([^\"]+)\"\\s*:\\s*\"");
 
@@ -57,6 +64,8 @@ public class ExchangeRateApiClient {
         String target = to.toLowerCase(Locale.ROOT);
         String body = fetch("currencies/" + base + ".min.json");
 
+        // Within the base object every value is numeric, so anchoring on a
+        // numeric value skips the "date" string and the base key's object.
         Pattern ratePattern = Pattern.compile(
                 "\"" + Pattern.quote(target) + "\"\\s*:\\s*(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)");
         Matcher matcher = ratePattern.matcher(body);
@@ -79,8 +88,9 @@ public class ExchangeRateApiClient {
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
-                break; 
+                break; // don't keep retrying if the thread was interrupted
             } catch (IOException e) {
+                // network problem with this host; fall through and try the next one
                 
             }
         }

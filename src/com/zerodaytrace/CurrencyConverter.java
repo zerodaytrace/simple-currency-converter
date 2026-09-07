@@ -43,6 +43,5 @@ public class CurrencyConverter {
         return new ConversionResult(amount * rate, rate);
     }
 
-    
     public record ConversionResult(double convertedAmount, double rate) { }
 }
