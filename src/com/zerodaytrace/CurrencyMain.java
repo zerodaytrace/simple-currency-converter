@@ -30,7 +30,12 @@ public class CurrencyMain {
             exitIfQuit(input, scanner);
 
             try {
-                amount = Double.parseDouble(input);
+                double parsed = Double.parseDouble(input);
+                if (!Double.isFinite(parsed) || parsed < 0) {
+                    System.out.println("Please enter a non-negative, finite amount.");
+                    continue;
+                }
+                amount = parsed;
                 break;
             } catch (NumberFormatException e) {
                 System.out.println("Invalid amount. Please enter a numeric value.");
@@ -70,8 +75,8 @@ public class CurrencyMain {
             String from = fromCurrency.toUpperCase(Locale.ROOT);
             String to = toCurrency.toUpperCase(Locale.ROOT);
 
-            System.out.printf("%.2f %s = %.2f %s%n", amount, from, result.convertedAmount(), to);
-            System.out.printf("Rate: 1 %s = %s %s%n", from, formatRate(result.rate()), to);  
+            System.out.printf(Locale.ROOT, "%.2f %s = %.2f %s%n", amount, from, result.convertedAmount(), to);
+            System.out.printf(Locale.ROOT, "Rate: 1 %s = %s %s%n", from, formatRate(result.rate()), to);  
             
         } catch (IllegalArgumentException | ExchangeRateApiClient.ExchangeRateException e) {
             System.out.println(e.getMessage());
